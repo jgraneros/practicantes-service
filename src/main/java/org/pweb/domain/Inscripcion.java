@@ -1,14 +1,14 @@
 package org.pweb.domain;
 
-import io.quarkus.hibernate.reactive.panache.PanacheEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import lombok.Data;
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class Inscripcion extends PanacheEntity {
 
@@ -16,6 +16,8 @@ public class Inscripcion extends PanacheEntity {
 
     @Enumerated(EnumType.STRING)
     private EstadoInscripcion estado;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "practicante_id")
     private Practicante practicante;
 
     public Inscripcion() {

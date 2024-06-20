@@ -1,14 +1,27 @@
 package org.pweb.domain;
 
+
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.pweb.domain.exceptions.RegistroDePracticantesException;
+
+import java.util.List;
 
 @Data
+@Slf4j
 @ApplicationScoped
 public class RegistroDePracticantes {
 
     private Inscripcion inscripcion;
     private Practicante practicante;
+    private final RegistroDeExamenes registroDeExamenes;
+
+    @Inject
+    public RegistroDePracticantes(RegistroDeExamenes registroDeExamenes) {
+        this.registroDeExamenes = registroDeExamenes;
+    }
 
     public void iniciarNuevaInscripcion() {
         this.inscripcion = new Inscripcion();
@@ -21,6 +34,20 @@ public class RegistroDePracticantes {
 
     public void ingresarPago(Double cantidad) {
         this.inscripcion.ingresarPago(cantidad);
+    }
+
+
+    public void registrarPracticanteAlExamen(String dni) throws RegistroDePracticantesException{
+
+        var practicante  = Practicante.buscarPorDni(dni);
+
+        if (practicante != null) {
+            this.registroDeExamenes.asignarPracticanteAlExamen(practicante);
+        } else {
+            throw new RegistroDePracticantesException("No existe el practicante con dni: " + dni);
+        }
+
+
     }
 
 }
