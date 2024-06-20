@@ -56,7 +56,7 @@ public class PracticantesResource {
 
         log.info("Creacion del examen");
 
-        var serviceResponse = service.crearExamen(examen);
+        var serviceResponse = service.gestionarExamen(examen);
         var success = (Boolean) serviceResponse.get(SUCCESS);
 
         if (success.booleanValue()) {

@@ -57,7 +57,7 @@ public class PracticantesService {
 
 
     @Transactional
-    public Map<String, Object> crearExamen(ExamenDTO examenDTO) {
+    public Map<String, Object> gestionarExamen(ExamenDTO examenDTO) {
 
         var fechaExamen = examenDTO.getFecha();
         var practicantes = examenDTO.getDniList();
