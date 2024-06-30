@@ -3,16 +3,14 @@ package org.pweb.rest;
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.pweb.domain.Examen;
 import org.pweb.domain.Practicante;
+import org.pweb.dto.CuotaDTO;
 import org.pweb.dto.ExamenDTO;
 import org.pweb.dto.PracticanteDTO;
 import org.pweb.service.PracticantesService;
@@ -76,5 +74,27 @@ public class PracticantesResource {
         }
 
     }
+
+    @PUT
+    @Path("cuotas")
+    @Consumes(MediaType.APPLICATION_JSON)
+
+    public Response pagarCuota(@RequestBody CuotaDTO cuotaDTO) {
+
+        log.info("Pago de cuotas");
+        var serviceResponse = service.abonarCuota(cuotaDTO);
+        var success = (Boolean) serviceResponse.get(SUCCESS);
+
+        if (success.booleanValue()) {
+            var entity = (Practicante) serviceResponse.get("ENTITY");
+            return Response.accepted(entity).build();
+        } else {
+
+            var causa = (String) serviceResponse.get(CAUSA);
+            return Response.status(400).entity(new JsonObject().put(ERROR, causa)).build();
+        }
+
+    }
+
 
 }

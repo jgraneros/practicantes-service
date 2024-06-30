@@ -39,8 +39,8 @@ public class Practicante extends PanacheEntity {
         this.cuotas = new ArrayList<>();
     }
 
-    public void pagarCuota(Double cantidad) {
-        var cuota = new Cuota(cantidad);
+    public void pagarCuota(Double cantidad, Mes mes) {
+        var cuota = new Cuota(cantidad, mes);
         this.cuotas.add(cuota);
     }
 

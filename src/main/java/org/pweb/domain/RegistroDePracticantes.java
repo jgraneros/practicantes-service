@@ -34,7 +34,6 @@ public class RegistroDePracticantes {
         this.inscripcion.ingresarPago(cantidad);
     }
 
-
     public void registrarPracticanteAlExamen(String dni) throws RegistroDePracticantesException{
 
         var practicanteEncontrado  = Practicante.buscarPorDni(dni);
@@ -46,4 +45,17 @@ public class RegistroDePracticantes {
         }
     }
 
+    public void pagarCuota(String dni, Double cantidad, String mes) throws RegistroDePracticantesException {
+
+            practicante  = Practicante.buscarPorDni(dni);
+
+        if (practicante != null) {
+
+            var mesEnum = Mes.valueOf(mes);
+            practicante.pagarCuota(cantidad, mesEnum);
+
+        } else {
+            throw new RegistroDePracticantesException("No existe el practicante con dni: " + dni);
+        }
+    }
 }

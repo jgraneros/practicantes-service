@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CuotaDTO {
 
-    private String estado;
-    private String fecha;
+    private Double cantidadEntregada;
+    private String mes;
+    private String dni;
+
 }

@@ -32,7 +32,7 @@ public class Inscripcion extends PanacheEntity {
     }
 
     public void ingresarPago(Double cantidad) {
-        this.practicante.pagarCuota(cantidad);
+        this.practicante.pagarCuota(cantidad, Mes.INSCRIPCION);
         var e = EstadoInscripcion.COMPLETADA;
         this.asignarEstado(e);
     }

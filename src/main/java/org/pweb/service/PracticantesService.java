@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.pweb.domain.*;
 import org.pweb.domain.exceptions.RegistroDeExamenException;
 import org.pweb.domain.exceptions.RegistroDePracticantesException;
+import org.pweb.dto.CuotaDTO;
 import org.pweb.dto.ExamenDTO;
 import org.pweb.dto.PracticanteDTO;
 
@@ -88,6 +89,34 @@ public class PracticantesService {
         serviceResponse.put(SUCCESS, Boolean.TRUE);
         serviceResponse.put(ENTITY, examen);
 
+        return serviceResponse;
+
+    }
+
+
+
+    @Transactional
+    public Map<String, Object> abonarCuota(CuotaDTO cuotaDTO) {
+
+        var dni = cuotaDTO.getDni();
+        var cantidadEntregada = cuotaDTO.getCantidadEntregada();
+        var mes = cuotaDTO.getMes();
+
+        Map<String, Object> serviceResponse = new HashMap<>();
+
+        try {
+            this.registroDePracticantes.pagarCuota(dni, cantidadEntregada, mes);
+        } catch (RegistroDePracticantesException e) {
+            serviceResponse.put(SUCCESS, Boolean.FALSE);
+            serviceResponse.put(CAUSA, e.getMessage());
+            return serviceResponse;
+        }
+
+        var practicante = registroDePracticantes.getPracticante();
+        practicante.persist();
+
+        serviceResponse.put(SUCCESS, Boolean.TRUE);
+        serviceResponse.put(ENTITY, practicante);
         return serviceResponse;
 
     }
