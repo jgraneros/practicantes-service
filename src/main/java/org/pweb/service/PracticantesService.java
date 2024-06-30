@@ -23,6 +23,7 @@ import static org.pweb.domain.exceptions.ExceptionConstants.*;
 @ApplicationScoped
 public class PracticantesService {
 
+    public static final String ENTITY = "ENTITY";
     private final RegistroDePracticantes registroDePracticantes;
     private final RegistroDeExamenes registroDeExamenes;
 
@@ -85,7 +86,7 @@ public class PracticantesService {
         examen.persist();
 
         serviceResponse.put(SUCCESS, Boolean.TRUE);
-        serviceResponse.put("ENTITY", examen);
+        serviceResponse.put(ENTITY, examen);
 
         return serviceResponse;
 

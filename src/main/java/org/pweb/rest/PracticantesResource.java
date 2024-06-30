@@ -1,4 +1,4 @@
-package org.pweb;
+package org.pweb.rest;
 
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -9,6 +9,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.*;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.pweb.domain.Examen;
 import org.pweb.domain.Practicante;
@@ -18,7 +19,7 @@ import org.pweb.service.PracticantesService;
 import static org.pweb.domain.exceptions.ExceptionConstants.*;
 
 @Slf4j
-@Path("/practicantes")
+@Path("/practicantes/v1/")
 @ApplicationScoped
 public class PracticantesResource {
 
@@ -38,6 +39,9 @@ public class PracticantesResource {
 
     @POST
     @Path("inscripcion")
+    @Operation(summary = "Permite inscribir a un nuevo practicante",
+    description = "Los datos necesarios para inscribir a un nuevo practicante son: nombre, apellido, telefono, " +
+            "dni y ademas se debe abonar el primer pago.")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response inscribirPracticante(@RequestBody PracticanteDTO practicante, @Context UriInfo uriInfo) {
 
@@ -52,7 +56,9 @@ public class PracticantesResource {
     @POST
     @Path("examen")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response crearExamen(@RequestBody ExamenDTO examen, @Context UriInfo uriInfo) {
+    @Operation(summary = "Permite crear un nuevo examen indicando la fecha y un listado de dni correspondientes a los" +
+            " practicantes")
+    public Response gestionarExamen(@RequestBody ExamenDTO examen, @Context UriInfo uriInfo) {
 
         log.info("Creacion del examen");
 

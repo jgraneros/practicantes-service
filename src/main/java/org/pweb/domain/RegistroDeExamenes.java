@@ -51,8 +51,8 @@ public class RegistroDeExamenes {
         return LocalDateTime.parse(fecha, formatter);
     }
 
-    public void asignarPracticanteAlExamen(Practicante result) {
-        log.debug("Asignando practicante al examen: {}", result);
-        this.examen.getPracticantes().add(result);
+    public void asignarPracticanteAlExamen(Practicante practicante) {
+        log.debug("Asignando practicante al examen: {}", practicante);
+        this.examen.getPracticantes().add(practicante);
     }
 }

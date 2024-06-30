@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.pweb.domain.exceptions.RegistroDePracticantesException;
 
-import java.util.List;
-
 @Data
 @Slf4j
 @ApplicationScoped
@@ -39,15 +37,13 @@ public class RegistroDePracticantes {
 
     public void registrarPracticanteAlExamen(String dni) throws RegistroDePracticantesException{
 
-        var practicante  = Practicante.buscarPorDni(dni);
+        var practicanteEncontrado  = Practicante.buscarPorDni(dni);
 
-        if (practicante != null) {
-            this.registroDeExamenes.asignarPracticanteAlExamen(practicante);
+        if (practicanteEncontrado != null) {
+            this.registroDeExamenes.asignarPracticanteAlExamen(practicanteEncontrado);
         } else {
             throw new RegistroDePracticantesException("No existe el practicante con dni: " + dni);
         }
-
-
     }
 
 }
