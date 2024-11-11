@@ -4,6 +4,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.pweb.domain.validations.Validar;
 
 import java.time.LocalDateTime;
 
@@ -28,6 +29,9 @@ public class Cuota extends PanacheEntity {
     public Cuota(){}
 
     public Cuota(Double cantidad) {
+
+        Validar.cantidad(cantidad);
+
         this.fecha = LocalDateTime.now();
         this.pago = new Pago(cantidad);
         this.mes = Mes.obtenerMesPorNumero(fecha.getMonthValue());

@@ -72,8 +72,8 @@ public class RegistroDePracticantes implements IRegistroDePracticantes {
 
         if (practicante != null) {
 
-
-            var mesEnum = Mes.valueOf(fecha);
+            log.info("fecha formateada");
+            var mesEnum = Mes.obtenerMesPorNumero(fechaFormateada.getMonthValue());
 
             var cuotas = practicante.getCuotas();
 

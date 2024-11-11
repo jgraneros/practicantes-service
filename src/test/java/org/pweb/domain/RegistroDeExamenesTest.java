@@ -2,6 +2,7 @@ package org.pweb.domain;
 
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.pweb.domain.exceptions.RegistroDeExamenException;
@@ -21,6 +22,7 @@ public class RegistroDeExamenesTest {
 
 
     @Test
+    @Transactional
     public void testRegistroExamenes() throws RegistroDeExamenException {
 
         Practicante practicante = new Practicante();

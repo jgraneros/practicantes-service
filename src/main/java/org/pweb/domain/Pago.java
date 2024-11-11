@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.pweb.domain.validations.Validar;
 
 @Getter
 @Setter
@@ -16,6 +17,9 @@ public class Pago extends PanacheEntity {
     private Double cantidad;
 
     public Pago(Double cantidad) {
+
+        Validar.cantidad(cantidad);
         this.cantidad = cantidad;
     }
+
 }
