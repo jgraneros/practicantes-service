@@ -1,6 +1,8 @@
 package org.pweb.service;
 
 
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -8,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.pweb.domain.*;
 import org.pweb.domain.exceptions.RegistroDeExamenException;
 import org.pweb.domain.exceptions.RegistroDePracticantesException;
+import org.pweb.domain.interfaces.IRegistroDeExamenes;
+import org.pweb.domain.interfaces.IRegistroDePracticantes;
 import org.pweb.dto.CuotaDTO;
 import org.pweb.dto.ExamenDTO;
 import org.pweb.dto.PracticanteDTO;
@@ -15,26 +19,29 @@ import org.pweb.dto.PracticanteDTO;
 
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 import static org.pweb.domain.exceptions.ExceptionConstants.*;
 
 @Slf4j
 @ApplicationScoped
-public class PracticantesService {
+public class PracticantesService implements IPracticanteService{
 
     public static final String ENTITY = "ENTITY";
-    private final RegistroDePracticantes registroDePracticantes;
-    private final RegistroDeExamenes registroDeExamenes;
+    private final IRegistroDePracticantes registroDePracticantes;
+    private final IRegistroDeExamenes registroDeExamenes;
 
     @Inject
-    public PracticantesService(RegistroDePracticantes registro, RegistroDeExamenes registroDeExamenes) {
+    public PracticantesService(IRegistroDePracticantes registro, IRegistroDeExamenes registroDeExamenes) {
         this.registroDePracticantes = registro;
         this.registroDeExamenes = registroDeExamenes;
     }
 
 
+    @Override
     @Transactional
     public Inscripcion inscribirPracticante(PracticanteDTO dto) {
 
@@ -48,16 +55,12 @@ public class PracticantesService {
         registroDePracticantes.ingresarDatosPersonales(dni, nombre, apellido, telefono);
         registroDePracticantes.ingresarPago(pago);
 
-        var inscripcion = registroDePracticantes.getInscripcion();
-
-        inscripcion.persist();
-
-        return inscripcion;
+        return registroDePracticantes.guardarInscripcion();
 
 
     }
 
-
+    @Override
     @Transactional
     public Map<String, Object> gestionarExamen(ExamenDTO examenDTO) {
 
@@ -82,9 +85,7 @@ public class PracticantesService {
             return serviceResponse;
         }
 
-        var examen = registroDeExamenes.getExamen();
-
-        examen.persist();
+        var examen = registroDeExamenes.guardarExamen();
 
         serviceResponse.put(SUCCESS, Boolean.TRUE);
         serviceResponse.put(ENTITY, examen);
@@ -94,13 +95,13 @@ public class PracticantesService {
     }
 
 
-
+    @Override
     @Transactional
-    public Map<String, Object> abonarCuota(CuotaDTO cuotaDTO) {
+    public Map<String, Object> gestionarCuota(CuotaDTO cuotaDTO) {
 
         var dni = cuotaDTO.getDni();
         var cantidadEntregada = cuotaDTO.getCantidadEntregada();
-        var mes = cuotaDTO.getMes();
+        var mes = cuotaDTO.getFecha();
 
         Map<String, Object> serviceResponse = new HashMap<>();
 
@@ -112,12 +113,50 @@ public class PracticantesService {
             return serviceResponse;
         }
 
-        var practicante = registroDePracticantes.getPracticante();
-        practicante.persist();
+        var practicante = registroDePracticantes.actualizarPracticante();
 
         serviceResponse.put(SUCCESS, Boolean.TRUE);
         serviceResponse.put(ENTITY, practicante);
         return serviceResponse;
+
+    }
+
+    @Override
+    public Map<String, Object> buscarPorDni(String dni) {
+
+        var optional = registroDePracticantes.buscarPorDni(dni);
+        Map<String, Object> serviceResponse = new HashMap<>();
+
+        if (optional.isPresent()) {
+            var practicante = optional.get();
+
+            var body = new JsonObject();
+            var array = new JsonArray();
+            var cuotasOptional = Optional.ofNullable(practicante.getCuotas());
+
+            if (cuotasOptional.isPresent()) {
+
+                for (var cuota : practicante.getCuotas()) {
+                    array.add(new JsonObject()
+                            .put("fecha", cuota.getFecha())
+                            .put("estado", cuota.getEstado())
+                            .put("mes", cuota.getMes()));
+                }
+                
+                body.put("nombre", practicante.getNombre())
+                    .put("apellido", practicante.getApellido());
+                body.put("cuotas", array);
+            }
+
+            serviceResponse.put(SUCCESS, Boolean.TRUE);
+            serviceResponse.put(ENTITY, body);
+            return serviceResponse;
+
+        } else {
+            serviceResponse.put(SUCCESS, Boolean.FALSE);
+            serviceResponse.put(CAUSA, "No hay datos disponibles");
+            return serviceResponse;
+        }
 
     }
 

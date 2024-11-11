@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 public class Examen extends PanacheEntity {
 
-    private LocalDateTime fecha;
+    private LocalDateTime fechaCreacion;
     private LocalDateTime fechaExamen;
 
     @OneToMany
@@ -23,7 +23,7 @@ public class Examen extends PanacheEntity {
     private EstadoExamen estadoExamen;
 
     public Examen() {
-        this.fecha = LocalDateTime.now();
+        this.fechaCreacion = LocalDateTime.now();
         this.practicantes = new ArrayList<>();
         var e = EstadoExamen.PENDIENTE;
         this.asignarEstado(e);

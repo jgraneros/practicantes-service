@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class CuotaDTO {
 
     private Double cantidadEntregada;
-    private String mes;
+    private String fecha;
     private String dni;
 
 }

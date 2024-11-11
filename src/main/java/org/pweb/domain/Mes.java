@@ -26,5 +26,14 @@ public enum Mes {
         return numero;
     }
 
+    public static Mes obtenerMesPorNumero(int numero) {
+        for (Mes mes: Mes.values()) {
+            if (mes.getNumero() == numero) {
+                return mes;
+            }
+        }
+
+        throw new IllegalArgumentException("Número de mes inválido: " + numero);
+    }
 
 }

@@ -19,10 +19,21 @@ public class Cuota extends PanacheEntity {
     @JoinColumn
     private Pago pago;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Practicante practicante;
+
     @Enumerated(EnumType.STRING)
     private Mes mes;
 
     public Cuota(){}
+
+    public Cuota(Double cantidad) {
+        this.fecha = LocalDateTime.now();
+        this.pago = new Pago(cantidad);
+        this.mes = Mes.obtenerMesPorNumero(fecha.getMonthValue());
+        var e = EstadoCuota.PAGADA;
+        this.asignarEstado(e);
+    }
 
     public Cuota(Double cantidad, Mes mes) {
         this.fecha = LocalDateTime.now();
