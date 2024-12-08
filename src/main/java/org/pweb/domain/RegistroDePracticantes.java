@@ -99,6 +99,48 @@ public class RegistroDePracticantes implements IRegistroDePracticantes {
     }
 
     @Override
+    public void pagarPermisoDeExamen(String dni, Double cantidad, String fecha) throws RegistroDePracticantesException {
+
+        practicante  = Practicante.buscarPorDni(dni);
+
+        LocalDateTime fechaFormateada;
+
+        try {
+            fechaFormateada = FechaUtils.formatearFecha(fecha);
+        } catch (DateTimeParseException dateTimeParseException) {
+            var error = FechaUtils.crearMensajeDeError(dateTimeParseException);
+            throw new RegistroDePracticantesException(error.toString());
+        }
+
+
+        if (practicante != null) {
+
+            log.info("fecha formateada");
+
+            var permisos = practicante.getPermisos();
+
+            for (var permisoDeExamen : permisos) {
+
+                var year = permisoDeExamen.getFecha().getYear();
+                var month = permisoDeExamen.getFecha().getMonthValue();
+
+                if (year == fechaFormateada.getYear() && month == fechaFormateada.getMonthValue()) {
+                    StringBuilder errorMessage = new StringBuilder("Ya existe un permiso para la fecha indicada: ")
+                            .append(fechaFormateada);
+                    throw new RegistroDePracticantesException(errorMessage.toString());
+                }
+
+            }
+
+            practicante.pagarPermisoDeExamen(cantidad);
+            practicante.persist();
+
+        } else {
+            throw new RegistroDePracticantesException("No existe el practicante con dni: " + dni);
+        }
+    }
+
+    @Override
     public Inscripcion guardarInscripcion() {
         this.inscripcion.persist();
         return getInscripcion();

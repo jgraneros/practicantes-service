@@ -12,14 +12,13 @@ import org.pweb.domain.exceptions.RegistroDeExamenException;
 import org.pweb.domain.exceptions.RegistroDePracticantesException;
 import org.pweb.domain.interfaces.IRegistroDeExamenes;
 import org.pweb.domain.interfaces.IRegistroDePracticantes;
-import org.pweb.dto.CuotaDTO;
+import org.pweb.dto.PagoDTO;
 import org.pweb.dto.ExamenDTO;
 import org.pweb.dto.PracticanteDTO;
 
 
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -94,14 +93,13 @@ public class PracticantesService implements IPracticanteService{
 
     }
 
-
     @Override
     @Transactional
-    public Map<String, Object> gestionarCuota(CuotaDTO cuotaDTO) {
+    public Map<String, Object> gestionarCuota(PagoDTO dto) {
 
-        var dni = cuotaDTO.getDni();
-        var cantidadEntregada = cuotaDTO.getCantidadEntregada();
-        var mes = cuotaDTO.getFecha();
+        var dni = dto.getDni();
+        var cantidadEntregada = dto.getCantidadEntregada();
+        var mes = dto.getFecha();
 
         Map<String, Object> serviceResponse = new HashMap<>();
 
@@ -133,6 +131,7 @@ public class PracticantesService implements IPracticanteService{
             var body = new JsonObject();
             var array = new JsonArray();
             var cuotasOptional = Optional.ofNullable(practicante.getCuotas());
+            var permisosOptional = Optional.ofNullable(practicante.getPermisos());
 
             if (cuotasOptional.isPresent()) {
 
@@ -148,6 +147,24 @@ public class PracticantesService implements IPracticanteService{
                 body.put("cuotas", array);
             }
 
+
+
+            if (permisosOptional.isPresent()) {
+
+                for (var permiso : practicante.getPermisos()) {
+                    array.add(new JsonObject()
+                            .put("fecha", permiso.getFecha())
+                            .put("estado", permiso.getEstado()));
+                }
+
+                body.put("nombre", practicante.getNombre())
+                        .put("apellido", practicante.getApellido());
+                body.put("permisos", array);
+            }
+
+
+
+
             serviceResponse.put(SUCCESS, Boolean.TRUE);
             serviceResponse.put(ENTITY, body);
             return serviceResponse;
@@ -158,6 +175,31 @@ public class PracticantesService implements IPracticanteService{
             return serviceResponse;
         }
 
+    }
+
+    @Override
+    public Map<String, Object> gestionarPermisoDeExamen(PagoDTO dto) {
+
+        var dni = dto.getDni();
+        var cantidadEntregada = dto.getCantidadEntregada();
+        var fecha = dto.getFecha();
+
+        Map<String, Object> serviceResponse = new HashMap<>();
+
+        try {
+            this.registroDePracticantes.pagarPermisoDeExamen(dni, cantidadEntregada, fecha);
+        } catch (RegistroDePracticantesException e) {
+            serviceResponse.put(SUCCESS, Boolean.FALSE);
+            serviceResponse.put(CAUSA, e.getMessage());
+            return serviceResponse;
+        }
+
+        var practicante = registroDePracticantes.actualizarPracticante();
+
+        serviceResponse.put(SUCCESS, Boolean.TRUE);
+        serviceResponse.put(ENTITY, practicante);
+
+        return serviceResponse;
     }
 
 }

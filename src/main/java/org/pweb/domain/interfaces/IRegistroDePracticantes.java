@@ -18,6 +18,8 @@ public interface IRegistroDePracticantes {
 
     void pagarCuota(String dni, Double cantidad, String fecha) throws RegistroDePracticantesException;
 
+    void pagarPermisoDeExamen(String dni, Double cantidad, String fecha) throws RegistroDePracticantesException;
+
     Inscripcion guardarInscripcion();
 
     Practicante actualizarPracticante();
@@ -25,4 +27,6 @@ public interface IRegistroDePracticantes {
     Practicante obtenerPracticante();
 
     Optional<Practicante> buscarPorDni(String dni);
+
+
 }

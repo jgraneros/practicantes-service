@@ -1,6 +1,5 @@
 package org.pweb.rest;
 
-import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -10,12 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.pweb.domain.Examen;
 import org.pweb.domain.Practicante;
-import org.pweb.dto.CuotaDTO;
+import org.pweb.dto.PagoDTO;
 import org.pweb.dto.ExamenDTO;
 import org.pweb.dto.PracticanteDTO;
 import org.pweb.service.IPracticanteService;
-
-import java.util.Optional;
 
 import static org.pweb.domain.exceptions.ExceptionConstants.*;
 
@@ -111,7 +108,7 @@ public class PracticantesResource implements IPracticantesResource{
 
 
     @Override
-    public Response pagarCuota(@RequestBody CuotaDTO cuotaDTO) {
+    public Response pagarCuota(@RequestBody PagoDTO cuotaDTO) {
 
         log.info("Pago de cuotas");
         var serviceResponse = service.gestionarCuota(cuotaDTO);
@@ -126,6 +123,22 @@ public class PracticantesResource implements IPracticantesResource{
             return Response.status(400).entity(new JsonObject().put(ERROR, causa)).build();
         }
 
+    }
+
+    @Override
+    public Response pagarPermisoDeExamen(PagoDTO dto) {
+
+        log.info("Pago de cuotas");
+        var serviceResponse = service.gestionarPermisoDeExamen(dto);
+        var success = (Boolean) serviceResponse.get(SUCCESS);
+
+        if (success.booleanValue()) {
+            return Response.accepted().build();
+        } else {
+
+            var causa = (String) serviceResponse.get(CAUSA);
+            return Response.status(400).entity(new JsonObject().put(ERROR, causa)).build();
+        }
     }
 
 

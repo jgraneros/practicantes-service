@@ -7,7 +7,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
-import org.pweb.dto.CuotaDTO;
+import org.pweb.dto.PagoDTO;
 import org.pweb.dto.ExamenDTO;
 import org.pweb.dto.PracticanteDTO;
 
@@ -33,5 +33,10 @@ public interface IPracticantesResource {
     @PUT
     @Path("cuotas")
     @Consumes(MediaType.APPLICATION_JSON)
-    Response pagarCuota(@RequestBody CuotaDTO cuotaDTO);
+    Response pagarCuota(@RequestBody PagoDTO cuotaDTO);
+
+    @PUT
+    @Path("permiso")
+    @Consumes(MediaType.APPLICATION_JSON)
+    Response pagarPermisoDeExamen(@RequestBody PagoDTO cuotaDTO);
 }

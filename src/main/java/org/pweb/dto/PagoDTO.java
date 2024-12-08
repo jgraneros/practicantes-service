@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CuotaDTO {
+public class PagoDTO {
 
     private Double cantidadEntregada;
     private String fecha;
