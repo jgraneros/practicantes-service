@@ -10,14 +10,18 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-public class PermisoDeExamen extends PanacheEntity {
+public class PermisoDeExamen extends Auditoria {
 
     @Enumerated(EnumType.STRING)
     private EstadoPermiso estado;
     private LocalDateTime fecha;
-    @ManyToOne
-    @JoinColumn(name = "pago_id")
+
+    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @JoinColumn
     private Pago pago;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Practicante practicante;
 
     public PermisoDeExamen(){
     }

@@ -8,10 +8,9 @@ import jakarta.ws.rs.core.*;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.pweb.domain.Examen;
-import org.pweb.domain.Practicante;
-import org.pweb.dto.PagoDTO;
-import org.pweb.dto.ExamenDTO;
-import org.pweb.dto.PracticanteDTO;
+import org.pweb.rest.dto.PagoDTO;
+import org.pweb.rest.dto.ExamenDTO;
+import org.pweb.rest.dto.PracticanteDTO;
 import org.pweb.service.IPracticanteService;
 
 import static org.pweb.domain.exceptions.ExceptionConstants.*;
@@ -45,32 +44,6 @@ public class PracticantesResource implements IPracticantesResource{
         }
 
 
-        /*Optional<Practicante> practicanteOptional = Practicante.buscarPorDniOpt(dni);
-
-        if (practicanteOptional.isPresent()) {
-
-            var practicante = practicanteOptional.get();
-            var body = new JsonObject();
-            var array = new JsonArray();
-
-            for (var cuota: practicante.getCuotas()) {
-                array.add(new JsonObject()
-                        .put("fecha", cuota.getFecha())
-                        .put("estado", cuota.getEstado())
-                        .put("mes", cuota.getMes()));
-            }
-
-            body.put("nombre", practicante.getNombre())
-                    .put("apellido", practicante.getApellido())
-                    .put("cuotas", array);
-
-            return Response.ok(body).build();
-
-        } else {
-            return Response.status(404).build();
-        }*/
-
-
     }
 
 
@@ -83,6 +56,11 @@ public class PracticantesResource implements IPracticantesResource{
         UriBuilder builder = uriInfo.getAbsolutePathBuilder().path(String.valueOf(inscripcion.id));
         return Response.created(builder.build()).build();
 
+    }
+
+    @Override
+    public Response actualizarPracticante(PracticanteDTO practicante, String dni) {
+        return null;
     }
 
 
@@ -115,8 +93,7 @@ public class PracticantesResource implements IPracticantesResource{
         var success = (Boolean) serviceResponse.get(SUCCESS);
 
         if (success.booleanValue()) {
-            var entity = (Practicante) serviceResponse.get("ENTITY");
-            return Response.accepted(entity).build();
+            return Response.accepted().build();
         } else {
 
             var causa = (String) serviceResponse.get(CAUSA);

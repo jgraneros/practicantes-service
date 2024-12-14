@@ -1,4 +1,4 @@
-package org.pweb.dto;
+package org.pweb.rest.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

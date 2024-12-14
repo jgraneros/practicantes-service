@@ -7,21 +7,27 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
-import org.pweb.dto.PagoDTO;
-import org.pweb.dto.ExamenDTO;
-import org.pweb.dto.PracticanteDTO;
+import org.pweb.rest.dto.PagoDTO;
+import org.pweb.rest.dto.ExamenDTO;
+import org.pweb.rest.dto.PracticanteDTO;
 
 public interface IPracticantesResource {
     @GET
     Response buscarPorDni(@QueryParam("dni") String dni);
 
     @POST
-    @Path("inscripcion")
+    @Path("practicante/inscripcion")
     @Operation(summary = "Permite inscribir a un nuevo practicante",
     description = "Los datos necesarios para inscribir a un nuevo practicante son: nombre, apellido, telefono, " +
             "dni y ademas se debe abonar el primer pago.")
     @Consumes(MediaType.APPLICATION_JSON)
     Response inscribirPracticante(@RequestBody PracticanteDTO practicante, @Context UriInfo uriInfo);
+
+    @PUT
+    @Path("practicante")
+    @Operation(summary = "Permite modificar los datos personales del practicante")
+    @Consumes(MediaType.APPLICATION_JSON)
+    Response actualizarPracticante(@RequestBody PracticanteDTO practicante, String dni);
 
     @POST
     @Path("examen")

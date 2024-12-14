@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class Examen extends PanacheEntity {
+public class Examen extends Auditoria {
 
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaExamen;

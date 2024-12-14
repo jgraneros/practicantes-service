@@ -12,9 +12,9 @@ import org.pweb.domain.exceptions.RegistroDeExamenException;
 import org.pweb.domain.exceptions.RegistroDePracticantesException;
 import org.pweb.domain.interfaces.IRegistroDeExamenes;
 import org.pweb.domain.interfaces.IRegistroDePracticantes;
-import org.pweb.dto.PagoDTO;
-import org.pweb.dto.ExamenDTO;
-import org.pweb.dto.PracticanteDTO;
+import org.pweb.rest.dto.PagoDTO;
+import org.pweb.rest.dto.ExamenDTO;
+import org.pweb.rest.dto.PracticanteDTO;
 
 
 
@@ -114,7 +114,7 @@ public class PracticantesService implements IPracticanteService{
         var practicante = registroDePracticantes.actualizarPracticante();
 
         serviceResponse.put(SUCCESS, Boolean.TRUE);
-        serviceResponse.put(ENTITY, practicante);
+        //serviceResponse.put(ENTITY, practicante);
         return serviceResponse;
 
     }
@@ -133,7 +133,7 @@ public class PracticantesService implements IPracticanteService{
             var cuotasOptional = Optional.ofNullable(practicante.getCuotas());
             var permisosOptional = Optional.ofNullable(practicante.getPermisos());
 
-            if (cuotasOptional.isPresent()) {
+            if (cuotasOptional.isPresent() && !cuotasOptional.get().isEmpty()) {
 
                 for (var cuota : practicante.getCuotas()) {
                     array.add(new JsonObject()
@@ -149,7 +149,7 @@ public class PracticantesService implements IPracticanteService{
 
 
 
-            if (permisosOptional.isPresent()) {
+            if (permisosOptional.isPresent() && !permisosOptional.get().isEmpty()) {
 
                 for (var permiso : practicante.getPermisos()) {
                     array.add(new JsonObject()
@@ -178,6 +178,7 @@ public class PracticantesService implements IPracticanteService{
     }
 
     @Override
+    @Transactional
     public Map<String, Object> gestionarPermisoDeExamen(PagoDTO dto) {
 
         var dni = dto.getDni();
@@ -197,7 +198,6 @@ public class PracticantesService implements IPracticanteService{
         var practicante = registroDePracticantes.actualizarPracticante();
 
         serviceResponse.put(SUCCESS, Boolean.TRUE);
-        serviceResponse.put(ENTITY, practicante);
 
         return serviceResponse;
     }

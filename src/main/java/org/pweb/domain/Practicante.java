@@ -20,7 +20,7 @@ import java.util.Optional;
 @Entity
 @Slf4j
 @NoArgsConstructor
-public class Practicante extends PanacheEntity {
+public class Practicante extends Auditoria {
 
     public static final String LOG_BUSCANDO_PRACTICANTE = "Buscando practicante";
     private String nombre;
@@ -31,7 +31,7 @@ public class Practicante extends PanacheEntity {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<Cuota> cuotas;
 
-    @OneToMany(fetch = jakarta.persistence.FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<PermisoDeExamen> permisos;
 
     public Practicante(String dni, String nombre, String apellido, String telefono) {

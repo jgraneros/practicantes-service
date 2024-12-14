@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-public class Cuota extends PanacheEntity {
+public class Cuota extends Auditoria {
 
     @Enumerated(EnumType.STRING)
     private EstadoCuota estado;

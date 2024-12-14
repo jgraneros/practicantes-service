@@ -12,7 +12,7 @@ import org.pweb.domain.validations.Validar;
 @Setter
 @Entity
 @NoArgsConstructor
-public class Pago extends PanacheEntity {
+public class Pago extends Auditoria {
 
     private Double cantidad;
 

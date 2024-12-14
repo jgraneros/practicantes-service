@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-public class Inscripcion extends PanacheEntity {
+public class Inscripcion extends Auditoria {
 
     private LocalDateTime fecha;
 
