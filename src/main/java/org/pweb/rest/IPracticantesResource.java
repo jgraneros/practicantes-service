@@ -12,6 +12,13 @@ import org.pweb.rest.dto.ExamenDTO;
 import org.pweb.rest.dto.PracticanteDTO;
 
 public interface IPracticantesResource {
+
+    @POST
+    @Path("/login")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response login(@FormParam("username") String username, @FormParam("password") String password);
+
     @GET
     Response buscarPorDni(@QueryParam("dni") String dni);
 
@@ -27,7 +34,7 @@ public interface IPracticantesResource {
     @Path("practicante")
     @Operation(summary = "Permite modificar los datos personales del practicante")
     @Consumes(MediaType.APPLICATION_JSON)
-    Response actualizarPracticante(@RequestBody PracticanteDTO practicante, String dni);
+    Response actualizarPracticante(@RequestBody PracticanteDTO practicante, @ QueryParam("dni") String dni);
 
     @POST
     @Path("examen")

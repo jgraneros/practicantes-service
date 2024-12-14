@@ -22,11 +22,20 @@ public class PracticantesResource implements IPracticantesResource{
 
     private final IPracticanteService service;
 
+
     @Inject
     public PracticantesResource(IPracticanteService service) {
         this.service = service;
     }
 
+
+    @Override
+    public Response login(String username, String password) {
+
+
+
+        return null;
+    }
 
     @Override
     public Response buscarPorDni(@QueryParam("dni") String dni) {
@@ -65,7 +74,7 @@ public class PracticantesResource implements IPracticantesResource{
     }
 
     @Override
-    public Response actualizarPracticante(PracticanteDTO practicante, String dni) {
+    public Response actualizarPracticante(@RequestBody PracticanteDTO practicante, @QueryParam("dni") String dni) {
         return null;
     }
 
