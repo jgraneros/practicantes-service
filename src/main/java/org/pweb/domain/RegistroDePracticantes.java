@@ -5,6 +5,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.pweb.domain.enums.Mes;
 import org.pweb.domain.exceptions.RegistroDePracticantesException;
 import org.pweb.domain.interfaces.IRegistroDePracticantes;
 import org.pweb.utils.FechaUtils;

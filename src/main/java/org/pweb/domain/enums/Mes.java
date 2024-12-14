@@ -1,4 +1,4 @@
-package org.pweb.domain;
+package org.pweb.domain.enums;
 
 public enum Mes {
 

@@ -1,9 +1,10 @@
 package org.pweb.domain;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.pweb.domain.enums.EstadoCuota;
+import org.pweb.domain.enums.Mes;
 import org.pweb.domain.validations.Validar;
 
 import java.time.LocalDateTime;
