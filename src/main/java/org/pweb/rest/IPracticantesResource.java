@@ -21,7 +21,7 @@ public interface IPracticantesResource {
     description = "Los datos necesarios para inscribir a un nuevo practicante son: nombre, apellido, telefono, " +
             "dni y ademas se debe abonar el primer pago.")
     @Consumes(MediaType.APPLICATION_JSON)
-    Response inscribirPracticante(@RequestBody PracticanteDTO practicante, @Context UriInfo uriInfo);
+    Response inscribirPracticante(@RequestBody PracticanteDTO dto, @Context UriInfo uriInfo);
 
     @PUT
     @Path("practicante")
@@ -34,12 +34,12 @@ public interface IPracticantesResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(summary = "Permite crear un nuevo examen indicando la fecha y un listado de dni correspondientes a los" +
             " practicantes")
-    Response gestionarExamen(@RequestBody ExamenDTO examen, @Context UriInfo uriInfo);
+    Response gestionarExamen(@RequestBody ExamenDTO dto, @Context UriInfo uriInfo);
 
     @PUT
     @Path("cuotas")
     @Consumes(MediaType.APPLICATION_JSON)
-    Response pagarCuota(@RequestBody PagoDTO cuotaDTO);
+    Response pagarCuota(@RequestBody PagoDTO dto);
 
     @PUT
     @Path("permiso")

@@ -48,11 +48,17 @@ public class PracticantesResource implements IPracticantesResource{
 
 
     @Override
-    public Response inscribirPracticante(@RequestBody PracticanteDTO practicante, @Context UriInfo uriInfo) {
+    public Response inscribirPracticante(@RequestBody PracticanteDTO dto, @Context UriInfo uriInfo) {
 
-        log.info("inscripcion de practicante: {}", practicante);
+        log.info("inscripcion de practicante: {}", dto);
 
-        var inscripcion = service.inscribirPracticante(practicante);
+        var nombre = dto.getNombre();
+        var apellido = dto.getApellido();
+        var telefono = dto.getTelefono();
+        var dni = dto.getDni();
+        var pago = dto.getPago();
+
+        var inscripcion = service.inscribirPracticante(nombre, apellido, telefono, dni, pago);
         UriBuilder builder = uriInfo.getAbsolutePathBuilder().path(String.valueOf(inscripcion.id));
         return Response.created(builder.build()).build();
 
@@ -65,11 +71,14 @@ public class PracticantesResource implements IPracticantesResource{
 
 
     @Override
-    public Response gestionarExamen(@RequestBody ExamenDTO examen, @Context UriInfo uriInfo) {
+    public Response gestionarExamen(@RequestBody ExamenDTO dto, @Context UriInfo uriInfo) {
 
         log.info("Creacion del examen");
 
-        var serviceResponse = service.gestionarExamen(examen);
+        var fechaExamen = dto.getFecha();
+        var dniList = dto.getDniList();
+
+        var serviceResponse = service.gestionarExamen(fechaExamen, dniList);
         var success = (Boolean) serviceResponse.get(SUCCESS);
 
         if (success.booleanValue()) {
@@ -86,10 +95,15 @@ public class PracticantesResource implements IPracticantesResource{
 
 
     @Override
-    public Response pagarCuota(@RequestBody PagoDTO cuotaDTO) {
+    public Response pagarCuota(@RequestBody PagoDTO dto) {
 
         log.info("Pago de cuotas");
-        var serviceResponse = service.gestionarCuota(cuotaDTO);
+
+        var dni = dto.getDni();
+        var cantidadEntregada = dto.getCantidadEntregada();
+        var mes = dto.getFecha();
+
+        var serviceResponse = service.gestionarCuota(dni, cantidadEntregada, mes);
         var success = (Boolean) serviceResponse.get(SUCCESS);
 
         if (success.booleanValue()) {
@@ -106,7 +120,12 @@ public class PracticantesResource implements IPracticantesResource{
     public Response pagarPermisoDeExamen(PagoDTO dto) {
 
         log.info("Pago de cuotas");
-        var serviceResponse = service.gestionarPermisoDeExamen(dto);
+
+        var dni = dto.getDni();
+        var cantidadEntregada = dto.getCantidadEntregada();
+        var fecha = dto.getFecha();
+
+        var serviceResponse = service.gestionarPermisoDeExamen(dni, cantidadEntregada, fecha);
         var success = (Boolean) serviceResponse.get(SUCCESS);
 
         if (success.booleanValue()) {

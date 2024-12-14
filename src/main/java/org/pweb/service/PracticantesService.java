@@ -14,11 +14,11 @@ import org.pweb.domain.interfaces.IRegistroDeExamenes;
 import org.pweb.domain.interfaces.IRegistroDePracticantes;
 import org.pweb.rest.dto.PagoDTO;
 import org.pweb.rest.dto.ExamenDTO;
-import org.pweb.rest.dto.PracticanteDTO;
 
 
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -42,13 +42,8 @@ public class PracticantesService implements IPracticanteService{
 
     @Override
     @Transactional
-    public Inscripcion inscribirPracticante(PracticanteDTO dto) {
+    public Inscripcion inscribirPracticante(String nombre, String apellido, String telefono, String dni, Double pago) {
 
-        var nombre = dto.getNombre();
-        var apellido = dto.getApellido();
-        var telefono = dto.getTelefono();
-        var dni = dto.getDni();
-        var pago = dto.getPago();
 
         registroDePracticantes.iniciarNuevaInscripcion();
         registroDePracticantes.ingresarDatosPersonales(dni, nombre, apellido, telefono);
@@ -61,19 +56,17 @@ public class PracticantesService implements IPracticanteService{
 
     @Override
     @Transactional
-    public Map<String, Object> gestionarExamen(ExamenDTO examenDTO) {
+    public Map<String, Object> gestionarExamen(String fecha, List<String> dniList) {
 
-        var fechaExamen = examenDTO.getFecha();
-        var practicantes = examenDTO.getDniList();
         Map<String, Object> serviceResponse = new HashMap<>();
 
         registroDeExamenes.iniciarRegistroDeExamen();
 
         try {
 
-            registroDeExamenes.asignarFechaDeExamen(fechaExamen);
+            registroDeExamenes.asignarFechaDeExamen(fecha);
 
-            for (String dni : practicantes) {
+            for (String dni : dniList) {
                 registroDePracticantes.registrarPracticanteAlExamen(dni);
             }
 
@@ -95,16 +88,12 @@ public class PracticantesService implements IPracticanteService{
 
     @Override
     @Transactional
-    public Map<String, Object> gestionarCuota(PagoDTO dto) {
-
-        var dni = dto.getDni();
-        var cantidadEntregada = dto.getCantidadEntregada();
-        var mes = dto.getFecha();
+    public Map<String, Object> gestionarCuota(String dni, Double cantidad, String mes) {
 
         Map<String, Object> serviceResponse = new HashMap<>();
 
         try {
-            this.registroDePracticantes.pagarCuota(dni, cantidadEntregada, mes);
+            this.registroDePracticantes.pagarCuota(dni, cantidad, mes);
         } catch (RegistroDePracticantesException e) {
             serviceResponse.put(SUCCESS, Boolean.FALSE);
             serviceResponse.put(CAUSA, e.getMessage());
@@ -179,16 +168,12 @@ public class PracticantesService implements IPracticanteService{
 
     @Override
     @Transactional
-    public Map<String, Object> gestionarPermisoDeExamen(PagoDTO dto) {
-
-        var dni = dto.getDni();
-        var cantidadEntregada = dto.getCantidadEntregada();
-        var fecha = dto.getFecha();
+    public Map<String, Object> gestionarPermisoDeExamen(String dni, Double cantidad, String fecha) {
 
         Map<String, Object> serviceResponse = new HashMap<>();
 
         try {
-            this.registroDePracticantes.pagarPermisoDeExamen(dni, cantidadEntregada, fecha);
+            this.registroDePracticantes.pagarPermisoDeExamen(dni, cantidad, fecha);
         } catch (RegistroDePracticantesException e) {
             serviceResponse.put(SUCCESS, Boolean.FALSE);
             serviceResponse.put(CAUSA, e.getMessage());
