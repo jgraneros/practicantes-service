@@ -1,6 +1,5 @@
 package org.pweb.service;
 
-
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -12,11 +11,6 @@ import org.pweb.domain.exceptions.RegistroDeExamenException;
 import org.pweb.domain.exceptions.RegistroDePracticantesException;
 import org.pweb.domain.interfaces.IRegistroDeExamenes;
 import org.pweb.domain.interfaces.IRegistroDePracticantes;
-import org.pweb.rest.dto.PagoDTO;
-import org.pweb.rest.dto.ExamenDTO;
-
-
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,10 +94,8 @@ public class PracticantesService implements IPracticanteService{
             return serviceResponse;
         }
 
-        var practicante = registroDePracticantes.actualizarPracticante();
-
         serviceResponse.put(SUCCESS, Boolean.TRUE);
-        //serviceResponse.put(ENTITY, practicante);
+
         return serviceResponse;
 
     }
@@ -179,8 +171,6 @@ public class PracticantesService implements IPracticanteService{
             serviceResponse.put(CAUSA, e.getMessage());
             return serviceResponse;
         }
-
-        var practicante = registroDePracticantes.actualizarPracticante();
 
         serviceResponse.put(SUCCESS, Boolean.TRUE);
 

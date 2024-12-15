@@ -1,5 +1,6 @@
 package org.pweb.rest;
 
+import io.quarkus.security.Authenticated;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
@@ -13,11 +14,6 @@ import org.pweb.rest.dto.PracticanteDTO;
 
 public interface IPracticantesResource {
 
-    @POST
-    @Path("/login")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response login(@FormParam("username") String username, @FormParam("password") String password);
 
     @GET
     Response buscarPorDni(@QueryParam("dni") String dni);

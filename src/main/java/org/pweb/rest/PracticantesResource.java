@@ -1,13 +1,18 @@
 package org.pweb.rest;
 
+import io.quarkus.security.Authenticated;
 import io.vertx.core.json.JsonObject;
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.pweb.domain.Examen;
+import org.pweb.infrastructure.security.keycloack.KeycloackClient;
 import org.pweb.rest.dto.PagoDTO;
 import org.pweb.rest.dto.ExamenDTO;
 import org.pweb.rest.dto.PracticanteDTO;
@@ -17,6 +22,7 @@ import static org.pweb.domain.exceptions.ExceptionConstants.*;
 
 @Slf4j
 @Path("/practicantes/v1/")
+@Authenticated
 @ApplicationScoped
 public class PracticantesResource implements IPracticantesResource{
 
@@ -29,14 +35,7 @@ public class PracticantesResource implements IPracticantesResource{
     }
 
 
-    @Override
-    public Response login(String username, String password) {
-
-
-
-        return null;
-    }
-
+    //@RolesAllowed("instructor")
     @Override
     public Response buscarPorDni(@QueryParam("dni") String dni) {
 
@@ -56,6 +55,7 @@ public class PracticantesResource implements IPracticantesResource{
     }
 
 
+    @RolesAllowed("instructor")
     @Override
     public Response inscribirPracticante(@RequestBody PracticanteDTO dto, @Context UriInfo uriInfo) {
 

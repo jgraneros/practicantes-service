@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.pweb.domain.enums.Mes;
 import org.pweb.domain.exceptions.RegistroDePracticantesException;
 import org.pweb.domain.interfaces.IRegistroDePracticantes;
-import org.pweb.utils.FechaUtils;
+import org.pweb.domain.utils.FechaUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
