@@ -11,4 +11,5 @@ public interface IAuthenticationResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response authenticate(@FormParam("username") String username, @FormParam("password") String password);
+
 }

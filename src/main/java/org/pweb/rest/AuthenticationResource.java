@@ -10,7 +10,7 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.pweb.infrastructure.security.keycloack.KeycloackClient;
 
 @Slf4j
-@Path("/users/v1")
+@Path("/usuarios/v1")
 @ApplicationScoped
 public class AuthenticationResource implements IAuthenticationResource{
 

@@ -21,7 +21,7 @@ public abstract class Auditoria extends PanacheEntity {
     private String usuarioModificador;
     private boolean activo;
 
-    @PrePersist
+/*    @PrePersist
     protected void prePersist() {
         System.out.println("pre persist");
         this.fechaCreacion = LocalDateTime.now();
@@ -34,7 +34,7 @@ public abstract class Auditoria extends PanacheEntity {
         System.out.println("pre update");
         this.fechaModificacion = LocalDateTime.now();
         // this.usuarioModificador = obtenerUsuarioActual();
-    }
+    }*/
 
 
 

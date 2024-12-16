@@ -13,6 +13,7 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.pweb.domain.Examen;
 import org.pweb.infrastructure.security.keycloack.KeycloackClient;
+import org.pweb.infrastructure.security.keycloack.interfaces.IAuthorizationService;
 import org.pweb.rest.dto.PagoDTO;
 import org.pweb.rest.dto.ExamenDTO;
 import org.pweb.rest.dto.PracticanteDTO;
@@ -27,11 +28,13 @@ import static org.pweb.domain.exceptions.ExceptionConstants.*;
 public class PracticantesResource implements IPracticantesResource{
 
     private final IPracticanteService service;
+    private final IAuthorizationService authorizationService;
 
 
     @Inject
-    public PracticantesResource(IPracticanteService service) {
+    public PracticantesResource(IPracticanteService service, IAuthorizationService authorizationService) {
         this.service = service;
+        this.authorizationService = authorizationService;
     }
 
 
@@ -57,7 +60,33 @@ public class PracticantesResource implements IPracticantesResource{
 
     @RolesAllowed("instructor")
     @Override
-    public Response inscribirPracticante(@RequestBody PracticanteDTO dto, @Context UriInfo uriInfo) {
+    public Response inscribirPracticante(@RequestBody PracticanteDTO dto, @Context UriInfo uriInfo, @Context HttpHeaders httpHeaders) {
+
+        String authorizationHeader = httpHeaders.getHeaderString("Authorization");
+
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("Token de autorización faltante o inválido.")
+                    .build();
+        }
+
+        String token = authorizationHeader.substring("Bearer ".length());
+
+        log.debug("Token recibido: " + token);
+
+        authorizationService.instrospectToken(token);
+
+        var active = authorizationService.tokenActivo();
+
+        if (!active) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("Token invalido.")
+                    .build();
+        }
+
+        var upn = authorizationService.obtenerUsuarioActual();
+
+        log.info("usuario upn: {}", upn);
 
         log.info("inscripcion de practicante: {}", dto);
 
@@ -67,7 +96,7 @@ public class PracticantesResource implements IPracticantesResource{
         var dni = dto.getDni();
         var pago = dto.getPago();
 
-        var inscripcion = service.inscribirPracticante(nombre, apellido, telefono, dni, pago);
+        var inscripcion = service.inscribirPracticante(nombre, apellido, telefono, dni, pago, upn);
         UriBuilder builder = uriInfo.getAbsolutePathBuilder().path(String.valueOf(inscripcion.id));
         return Response.created(builder.build()).build();
 

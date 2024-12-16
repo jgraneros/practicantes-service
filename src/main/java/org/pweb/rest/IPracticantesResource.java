@@ -2,10 +2,7 @@ package org.pweb.rest;
 
 import io.quarkus.security.Authenticated;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
+import jakarta.ws.rs.core.*;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.pweb.rest.dto.PagoDTO;
@@ -24,7 +21,7 @@ public interface IPracticantesResource {
     description = "Los datos necesarios para inscribir a un nuevo practicante son: nombre, apellido, telefono, " +
             "dni y ademas se debe abonar el primer pago.")
     @Consumes(MediaType.APPLICATION_JSON)
-    Response inscribirPracticante(@RequestBody PracticanteDTO dto, @Context UriInfo uriInfo);
+    Response inscribirPracticante(@RequestBody PracticanteDTO dto, @Context UriInfo uriInfo, @Context HttpHeaders httpHeaders);
 
     @PUT
     @Path("practicante")

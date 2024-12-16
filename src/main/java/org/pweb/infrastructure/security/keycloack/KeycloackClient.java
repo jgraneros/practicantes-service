@@ -24,4 +24,14 @@ public interface KeycloackClient {
     );
 
 
+    @POST
+    @Path("/token/introspect")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    Map<String, Object> introspectToken(
+            @FormParam("token") String token,
+            @FormParam("client_id") String clientId,
+            @FormParam("client_secret") String clientSecret
+    );
+
+
 }

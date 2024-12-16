@@ -10,9 +10,9 @@ public interface IRegistroDePracticantes {
 
     void iniciarNuevaInscripcion();
 
-    void ingresarDatosPersonales(String dni, String nombre, String apellido, String telefono);
+    void ingresarDatosPersonales(String dni, String nombre, String apellido, String telefono, String upn);
 
-    void ingresarPago(Double cantidad);
+    void ingresarPago(Double cantidad, String upn);
 
     void registrarPracticanteAlExamen(String dni) throws RegistroDePracticantesException;
 
