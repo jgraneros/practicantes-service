@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface IPracticanteService {
 
-    Inscripcion inscribirPracticante(String nombre, String apellido, String telefono, String dni, Double pago, String upn);
+    Inscripcion inscribirPracticante(String nombre, String apellido, String telefono, String dni, Double pago);
 
     Map<String, Object> gestionarExamen(String fecha, List<String> dniList);
 

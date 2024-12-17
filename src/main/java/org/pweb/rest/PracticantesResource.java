@@ -96,7 +96,7 @@ public class PracticantesResource implements IPracticantesResource{
         var dni = dto.getDni();
         var pago = dto.getPago();
 
-        var inscripcion = service.inscribirPracticante(nombre, apellido, telefono, dni, pago, upn);
+        var inscripcion = service.inscribirPracticante(nombre, apellido, telefono, dni, pago);
         UriBuilder builder = uriInfo.getAbsolutePathBuilder().path(String.valueOf(inscripcion.id));
         return Response.created(builder.build()).build();
 
