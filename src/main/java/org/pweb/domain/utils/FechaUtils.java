@@ -1,4 +1,4 @@
-package org.pweb.utils;
+package org.pweb.domain.utils;
 
 import lombok.extern.slf4j.Slf4j;
 

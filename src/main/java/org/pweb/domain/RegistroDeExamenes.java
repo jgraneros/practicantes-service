@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.pweb.domain.exceptions.RegistroDeExamenException;
 import org.pweb.domain.interfaces.IRegistroDeExamenes;
-import org.pweb.utils.FechaUtils;
+import org.pweb.domain.utils.FechaUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;

@@ -1,13 +1,19 @@
 package org.pweb.rest;
 
+import io.quarkus.security.Authenticated;
 import io.vertx.core.json.JsonObject;
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.pweb.domain.Examen;
+import org.pweb.infrastructure.security.keycloack.KeycloackClient;
+import org.pweb.infrastructure.security.keycloack.interfaces.IAuthorizationService;
 import org.pweb.rest.dto.PagoDTO;
 import org.pweb.rest.dto.ExamenDTO;
 import org.pweb.rest.dto.PracticanteDTO;
@@ -17,17 +23,22 @@ import static org.pweb.domain.exceptions.ExceptionConstants.*;
 
 @Slf4j
 @Path("/practicantes/v1/")
+@Authenticated
 @ApplicationScoped
 public class PracticantesResource implements IPracticantesResource{
 
     private final IPracticanteService service;
+    private final IAuthorizationService authorizationService;
+
 
     @Inject
-    public PracticantesResource(IPracticanteService service) {
+    public PracticantesResource(IPracticanteService service, IAuthorizationService authorizationService) {
         this.service = service;
+        this.authorizationService = authorizationService;
     }
 
 
+    //@RolesAllowed("instructor")
     @Override
     public Response buscarPorDni(@QueryParam("dni") String dni) {
 
@@ -47,8 +58,35 @@ public class PracticantesResource implements IPracticantesResource{
     }
 
 
+    @RolesAllowed("instructor")
     @Override
-    public Response inscribirPracticante(@RequestBody PracticanteDTO dto, @Context UriInfo uriInfo) {
+    public Response inscribirPracticante(@RequestBody PracticanteDTO dto, @Context UriInfo uriInfo, @Context HttpHeaders httpHeaders) {
+
+        String authorizationHeader = httpHeaders.getHeaderString("Authorization");
+
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("Token de autorización faltante o inválido.")
+                    .build();
+        }
+
+        String token = authorizationHeader.substring("Bearer ".length());
+
+        log.debug("Token recibido: " + token);
+
+        authorizationService.instrospectToken(token);
+
+        var active = authorizationService.tokenActivo();
+
+        if (!active) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("Token invalido.")
+                    .build();
+        }
+
+        var upn = authorizationService.obtenerUsuarioActual();
+
+        log.info("usuario upn: {}", upn);
 
         log.info("inscripcion de practicante: {}", dto);
 
@@ -65,7 +103,7 @@ public class PracticantesResource implements IPracticantesResource{
     }
 
     @Override
-    public Response actualizarPracticante(PracticanteDTO practicante, String dni) {
+    public Response actualizarPracticante(@RequestBody PracticanteDTO practicante, @QueryParam("dni") String dni) {
         return null;
     }
 

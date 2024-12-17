@@ -4,12 +4,14 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.pweb.domain.listeners.AuditoriaListener;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @MappedSuperclass
+@EntityListeners(AuditoriaListener.class)
 public abstract class Auditoria extends PanacheEntity {
 
     @Column(updatable = false)
@@ -21,7 +23,7 @@ public abstract class Auditoria extends PanacheEntity {
     private String usuarioModificador;
     private boolean activo;
 
-    @PrePersist
+/*    @PrePersist
     protected void prePersist() {
         System.out.println("pre persist");
         this.fechaCreacion = LocalDateTime.now();
@@ -34,7 +36,7 @@ public abstract class Auditoria extends PanacheEntity {
         System.out.println("pre update");
         this.fechaModificacion = LocalDateTime.now();
         // this.usuarioModificador = obtenerUsuarioActual();
-    }
+    }*/
 
 
 

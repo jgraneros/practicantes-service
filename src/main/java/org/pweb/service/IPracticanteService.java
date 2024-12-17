@@ -1,9 +1,6 @@
 package org.pweb.service;
 
 import org.pweb.domain.Inscripcion;
-import org.pweb.rest.dto.PagoDTO;
-import org.pweb.rest.dto.ExamenDTO;
-import org.pweb.rest.dto.PracticanteDTO;
 
 import java.util.List;
 import java.util.Map;
