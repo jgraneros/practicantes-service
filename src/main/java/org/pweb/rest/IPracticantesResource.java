@@ -1,6 +1,5 @@
 package org.pweb.rest;
 
-import io.quarkus.security.Authenticated;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -16,7 +15,7 @@ public interface IPracticantesResource {
     Response buscarPorDni(@QueryParam("dni") String dni);
 
     @POST
-    @Path("practicante/inscripcion")
+    @Path("/inscripcion")
     @Operation(summary = "Permite inscribir a un nuevo practicante",
     description = "Los datos necesarios para inscribir a un nuevo practicante son: nombre, apellido, telefono, " +
             "dni y ademas se debe abonar el primer pago.")
@@ -24,10 +23,9 @@ public interface IPracticantesResource {
     Response inscribirPracticante(@RequestBody PracticanteDTO dto, @Context UriInfo uriInfo, @Context HttpHeaders httpHeaders);
 
     @PUT
-    @Path("practicante")
     @Operation(summary = "Permite modificar los datos personales del practicante")
     @Consumes(MediaType.APPLICATION_JSON)
-    Response actualizarPracticante(@RequestBody PracticanteDTO practicante, @ QueryParam("dni") String dni);
+    Response actualizarPracticante(@RequestBody PracticanteDTO dto, @QueryParam("dni") String dni);
 
     @POST
     @Path("examen")

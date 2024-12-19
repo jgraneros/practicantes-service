@@ -2,7 +2,6 @@ package org.pweb.rest;
 
 import io.quarkus.security.Authenticated;
 import io.vertx.core.json.JsonObject;
-import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -10,9 +9,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.pweb.domain.Examen;
-import org.pweb.infrastructure.security.keycloack.KeycloackClient;
 import org.pweb.infrastructure.security.keycloack.interfaces.IAuthorizationService;
 import org.pweb.rest.dto.PagoDTO;
 import org.pweb.rest.dto.ExamenDTO;
@@ -103,8 +100,25 @@ public class PracticantesResource implements IPracticantesResource{
     }
 
     @Override
-    public Response actualizarPracticante(@RequestBody PracticanteDTO practicante, @QueryParam("dni") String dni) {
-        return null;
+    public Response actualizarPracticante(@RequestBody PracticanteDTO dto, @QueryParam("dni") String dni) {
+
+        log.info("actualizacion de practicante");
+
+        var nombre = dto.getNombre();
+        var apellido = dto.getApellido();
+        var telefono = dto.getTelefono();
+
+        var serviceResponse = service.actualizarPracticante(nombre, apellido, telefono, dni);
+        var success = (Boolean) serviceResponse.get(SUCCESS);
+
+        if (success.booleanValue()) {
+            var entity = (JsonObject) serviceResponse.get("ENTITY");
+            return Response.accepted(entity).build();
+        } else {
+            var causa = (String) serviceResponse.get(CAUSA);
+            return Response.status(400).entity(new JsonObject().put(ERROR, causa)).build();
+        }
+
     }
 
 

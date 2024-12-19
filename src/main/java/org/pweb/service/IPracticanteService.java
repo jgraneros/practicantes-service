@@ -16,4 +16,6 @@ public interface IPracticanteService {
     Map<String, Object> buscarPorDni(String dni);
 
     Map<String, Object> gestionarPermisoDeExamen(String dni, Double cantidad, String fecha);
+
+    Map<String, Object> actualizarPracticante(String nombre, String apellido, String telefono, String dni);
 }

@@ -177,4 +177,36 @@ public class PracticantesService implements IPracticanteService{
         return serviceResponse;
     }
 
+    @Override
+    @Transactional
+    public Map<String, Object> actualizarPracticante(String nombre, String apellido, String telefono, String dni) {
+
+        var optional = registroDePracticantes.buscarPorDni(dni);
+        Map<String, Object> serviceResponse = new HashMap<>();
+
+
+        if (optional.isPresent()) {
+
+            var practicante = optional.get();
+            practicante.setNombre(nombre);
+            practicante.setApellido(apellido);
+            practicante.setTelefono(telefono);
+            practicante.persistAndFlush();
+
+            var body = new JsonObject()
+                    .put("nombre", practicante.getNombre())
+                    .put("apellido", practicante.getApellido())
+                    .put("telefono", practicante.getTelefono());
+
+            serviceResponse.put(SUCCESS, Boolean.TRUE);
+            serviceResponse.put(ENTITY, body);
+
+
+        } else {
+            serviceResponse.put(SUCCESS, Boolean.FALSE);
+        }
+
+        return serviceResponse;
+    }
+
 }
