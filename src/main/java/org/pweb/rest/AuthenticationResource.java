@@ -1,6 +1,5 @@
 package org.pweb.rest;
 
-import io.quarkus.security.Authenticated;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Path;
@@ -24,6 +23,8 @@ public class AuthenticationResource implements IAuthenticationResource{
 
     @Override
     public Response authenticate(String username, String password) {
+
+        log.info("iniciando autenticacion...");
 
         var response = tokenClient.getToken(
                 "password",
